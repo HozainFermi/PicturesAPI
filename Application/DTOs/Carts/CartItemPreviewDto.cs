@@ -15,6 +15,7 @@ namespace Pictures.Application.DTOs.Carts
         public decimal Price { get; set; }
         public string MediaPath { get; set; }
         public string Title { get; set; }
+        public string ShortDescription { get; set; }
 
 
     }

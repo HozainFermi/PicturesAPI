@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IDK.Application.Models.Orders;
-using IDK.Application.Models.Users;
+﻿using Pictures.Application.DTOs.Users;
 
 namespace IDK.Application.Abstractions
 {

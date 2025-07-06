@@ -83,7 +83,7 @@ namespace IDK.Application.ProductExtensions
                 Price = p.Price,
                 ShortDescription = p.Description.Length > 40 ? p.Description.Substring(0, 40) + "..." : p.Description,
                 ProductImageUrl = p.MediaPathsJson.FirstOrDefault(),
-                Views = p.Views,
+               
                 OwnerName = $"{p.ProductOwner.FirstName} {p.ProductOwner.LastName}",
                 OwnerAvatarUrl = p.ProductOwner.MediaPathsJson.FirstOrDefault()
             }                

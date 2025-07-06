@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Pictures.Application.DTOs.Carts
 {
-    public class CartItemDto
+    public class CreateCartItemDto
     {
-        public Guid? CartItemId { get; set; }
+        //public Guid? CartItemId { get; set; }
         public Guid CartId { get; set; }
         public Guid ProductId { get; set; }
         public int Quantity { get; set; }

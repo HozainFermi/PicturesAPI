@@ -11,6 +11,6 @@ namespace IDK.Application.ProductExtensions
         public Guid? Id { get; set; }
         public Guid? OwnerId { get; set; }
         public string? Name { get; set; }
-       // public string? Views { get; set; }
+       
     }
 }
