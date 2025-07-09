@@ -1,6 +1,6 @@
-﻿using IDK.Application.Models.Pages;
-using IDK.Application.Models.Products;
-using IDK.Application.ProductExtensions;
+﻿using Application.DTOs.Products;
+using Application.Models.ProductExtensions;
+using IDK.Application.Models.Pages;
 using IDK.Domain.Entities;
 using System;
 using System.Collections.Generic;

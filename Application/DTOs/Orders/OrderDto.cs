@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.Orders
+namespace Pictures.Application.DTOs.Orders
 {
-    public class OrderDto : CreateOrderDto
+    public class OrderDto 
     {
         public Guid Id { get; set; }
     }

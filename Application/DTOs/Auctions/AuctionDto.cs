@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pictures.Application.Models.ProductExtensions
+namespace Application.DTOs.Auctions
 {
-    public enum SortDirection
+    internal class AuctionDto
     {
-        Ascending,
-        Descending
     }
 }

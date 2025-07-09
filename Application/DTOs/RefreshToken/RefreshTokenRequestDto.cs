@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.RefreshToken
+namespace Pictures.Application.DTOs.RefreshToken
 {
     public class RefreshTokenRequestDto
     {

@@ -1,27 +1,16 @@
-﻿using IDK.Application.Mappers;
-using IDK.Application.Models.Pages;
-using IDK.Application.Models.Products;
-using IDK.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using Domain.Entities;
+ 
+using Infrastracture.Extensions;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
-using System.Xml.Linq;
-using IDK.Application.Models.Carts;
 
-namespace IDK.Application.ProductExtensions
+namespace Infrastracture.Extensions
 {
     public static class ProductExtension
     {
 
         public static IQueryable<ProductEntity> Filter(this IQueryable<ProductEntity> query, ProductFilter productFilter)
         {
-            if (!string.IsNullOrEmpty(productFilter.Name)) 
+            if (!string.IsNullOrEmpty(productFilter.Name))
             {
                 query = query.Where(c => EF.Functions.Like(c.Name, $"{productFilter.Name}%"));
             }
@@ -56,13 +45,13 @@ namespace IDK.Application.ProductExtensions
                 nameof(ProductEntity.Count) => x => x.Count,
                 nameof(ProductEntity.Id) => x => x.Id,
                 nameof(ProductEntity.Views) => x => x.Views,
-                _ =>x=>x.Name
+                _ => x => x.Name
             };
         }
 
         public static async Task<PageDto<ProductPreviewDto>> Page(this IQueryable<ProductEntity> query, PageParams pageParams)
         {
-           
+
             query.Include(p => p.ProductOwner);
 
             var total = await query.CountAsync();
@@ -74,23 +63,23 @@ namespace IDK.Application.ProductExtensions
             var page = pageParams.Page ?? 1;
             var pagesize = pageParams.PageSize ?? 10;
 
-            var skip = (page-1)*pagesize;
-            var res  = await query.Skip(skip).Take(pagesize)
-            .Select(p=> new ProductPreviewDto
+            var skip = (page - 1) * pagesize;
+            var res = await query.Skip(skip).Take(pagesize)
+            .Select(p => new ProductPreviewDto
             {
                 Id = p.Id,
                 Name = p.Name,
                 Price = p.Price,
                 ShortDescription = p.Description.Length > 40 ? p.Description.Substring(0, 40) + "..." : p.Description,
                 ProductImageUrl = p.MediaPathsJson.FirstOrDefault(),
-               
+
                 OwnerName = $"{p.ProductOwner.FirstName} {p.ProductOwner.LastName}",
                 OwnerAvatarUrl = p.ProductOwner.MediaPathsJson.FirstOrDefault()
-            }                
+            }
                 )
                 .ToArrayAsync();
-     
-            var pageResult = new PageDto<ProductPreviewDto>(res,total);
+
+            var pageResult = new PageDto<ProductPreviewDto>(res, total);
 
             return pageResult;
         }

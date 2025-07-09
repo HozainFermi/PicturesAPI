@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.Products
+namespace Pictures.Application.DTOs.Products
 {
     public class ProductCreateDto
     {

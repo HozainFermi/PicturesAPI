@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IDK.Application.Models.Pages
+namespace Pictures.Application.Models.Pages
 {
     public class PageDto<T>
     {
 
-      public  T[] data { get; set; }
+       public  T[] data { get; set; }
        public int totalCount { get; set; }
 
         public PageDto(T[] data, int totalCount)

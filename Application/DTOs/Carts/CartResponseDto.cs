@@ -1,4 +1,4 @@
-﻿using IDK.Application.Models.Pages;
+﻿using Pictures.Application.Models.Pages;
 
 namespace Pictures.Application.DTOs.Carts
 {
@@ -7,6 +7,6 @@ namespace Pictures.Application.DTOs.Carts
         //public Guid CartId { get; set; }
         //public Guid CartOwnerId { get; set; }
         public PageDto<CartItemPreviewDto> CartItems { get; set; }
-        
+
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
-using IDK.Application.Models.Pages;
-using IDK.Application.ProductExtensions;
 using Pictures.Application.DTOs.Carts;
+using Pictures.Application.Models.Pages;
+using Pictures.Application.Models.ProductExtensions;
 
 namespace Application.ServiceInterfaces
 {

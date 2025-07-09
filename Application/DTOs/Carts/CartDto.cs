@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace Pictures.Application.DTOs.Carts
 {
-    public class UpdateCartItemDto
+    public class CartDto
     {
-        public Guid CartItemId { get; set; }
-        public int? UpdatedQuantity { get; set; }
-        
+        public Guid CartId { get; set; }
+        public Guid CartOwnerId { get; set; }
+        public List<CartItemDto>? CartItems { get; set; }
+
     }
 }

@@ -1,21 +1,15 @@
-﻿using Application.DTOs.Carts;
-using IDK.Application.Models.Pages;
-using IDK.Application.ProductExtensions;
-using Pictures.Application.DTOs.Carts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Pictures.Application.DTOs.Carts;
+using Pictures.Application.Models.Pages;
+using Pictures.Application.Models.ProductExtensions;
 
 namespace Application.ServiceInterfaces
 {
     public interface ICartItemService
     {
-        public Task<CreateCartItemDto> Create(CartItemDto dto);
+        public Task<CreateCartItemDto> Create(CreateCartItemDto dto);
         public Task<PageDto<CartItemPreviewDto>> GetItems(PageParams pageParams, Guid cartId);
-        public Task<CartItemDto> DeleteById(Guid itemId);
-        public Task<CartItemDto> DisableById(Guid itemId);
+        public Task<ResponseCartItemDto> DeleteById(Guid itemId);
+        public Task<ResponseCartItemDto> DisableById(Guid itemId);
         public Task<bool?> Update(UpdateCartItemDto updateDto);
 
     }

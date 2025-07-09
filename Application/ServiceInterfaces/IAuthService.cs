@@ -1,9 +1,9 @@
 ﻿using Pictures.Application.DTOs.TokenResponse;
 using Domain.Entities;
 using Pictures.Application.DTOs.Users;
-using Application.DTOs.RefreshToken;
+using Pictures.Application.DTOs.RefreshToken;
 
-namespace IDK.Application.Abstractions
+namespace Pictures.Application.Models.Abstractions
 {
     public interface IAuthService
     {

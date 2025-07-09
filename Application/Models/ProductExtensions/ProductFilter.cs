@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IDK.Application.ProductExtensions
+namespace Pictures.Application.Models.ProductExtensions
 {
     public class ProductFilter
     {
         public Guid? Id { get; set; }
         public Guid? OwnerId { get; set; }
         public string? Name { get; set; }
-       
+
     }
 }
