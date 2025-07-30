@@ -1,14 +1,9 @@
-﻿using Application.DTOs.Products;
-using Application.Models.ProductExtensions;
-using IDK.Application.Models.Pages;
-using IDK.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.Models.Pages;
+using Pictures.Application.DTOs.Products;
+using Pictures.Application.Models.Pages;
+using Pictures.Application.Models.ProductExtensions;
 
-namespace IDK.Application.Abstractions
+namespace Application.ServiceInterfaces
 {
     public interface IProductService
     {

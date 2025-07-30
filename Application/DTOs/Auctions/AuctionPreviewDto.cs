@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Auctions
 {
-    internal class AuctionPreviewDto
+    public class AuctionPreviewDto
     {
     }
 }

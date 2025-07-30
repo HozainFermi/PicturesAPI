@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pictures.Application.Models.ProductExtensions
+namespace Application.Models.Pages
 {
     public class PageParams
     {

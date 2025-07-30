@@ -1,18 +1,18 @@
-﻿using Domain.Entities;
+﻿using Application.Models.Pages;
+using Domain.Entities;
 using Pictures.Application.DTOs.Carts;
 using Pictures.Application.Models.Pages;
-using Pictures.Application.Models.ProductExtensions;
 
 namespace Application.ServiceInterfaces
 {
     public interface ICartService
     {
-        Task<Guid> Create(UserEntity user);
-        Task<CartDto> DeleteCart(Guid id);
+        public Task<PageDto<CartItemEntity>> GetCartItemsByUserId(PageParams pageParams,Guid userId);
+        public Task<CartEntity> GetCartById(Guid id);
+        public Task<CartEntity> GetCartByUserId(Guid userId);
+        public Task<CartEntity> CleanCartById(Guid cartId);
 
-        Task<CartDto> EmptyCart(Guid id);
-
-        Task<PageDto<CartItemPreviewDto>> GetCartByUserId(PageParams pageParams, Guid userId);
+        
 
     }
 }

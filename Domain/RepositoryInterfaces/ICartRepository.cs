@@ -9,11 +9,13 @@ namespace Domain.RepositoryInterfaces
 {
     public interface ICartRepository
     {
-        public Task<ICollection<CartItemEntity>> GetCartItemsByUserId(Guid userId);
-        public Task<CartEntity> GetCartById(Guid id);
-        public Task<CartEntity> GetCartByUserId(Guid userId);
-        public Task<UserEntity> GetUserByCartId(Guid cartId);
+        public Task<CartEntity> Create(UserEntity user);
+        public Task<CartEntity> GetById(Guid id);
+        public Task<CartEntity> GetByUserId(Guid userId);
+        public Task<CartEntity> Delete(Guid id);
 
-        public Task<CartEntity> CleanCartById(Guid cartId);
+        //public Task<CartDto> EmptyCart(Guid id);
+
+        //public Task<PageDto<CartItemPreviewDto>> GetCartByUserId(PageParams pageParams, Guid userId);
     }
 }

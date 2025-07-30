@@ -9,13 +9,13 @@ namespace Domain.RepositoryInterfaces
 {
     public interface IOrderRepository
     {
-        public Task<OrderEntity> GetByUserId(Guid id);       
         public Task<OrderEntity> GetById(Guid id);
+        public Task<OrderEntity> GetByUserId(Guid id);       
 
-        public Task<OrderEntity> EditOrderQuantityById(Guid id, int newQuantity);
-        public Task<OrderEntity> EditOrderDeliveryById(Guid id, string newDeliveryAddress);
+        public Task<OrderEntity> UpdateOrderQuantityById(Guid id, int newQuantity);
+        public Task<OrderEntity> UpdateOrderDeliveryById(Guid id, string newDeliveryAddress);
         
-        public Task<OrderEntity> Delete(Guid orderId);
+        public Task<OrderEntity> DeleteById(Guid orderId);
 
     }
 }

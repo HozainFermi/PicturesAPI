@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.Auctions
+namespace Application.Services
 {
-    public class BidResultDto
+    internal class ProductService
     {
     }
 }
