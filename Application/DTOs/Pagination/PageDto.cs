@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pictures.Application.Models.Pages
+namespace Application.DTOs.Pagination
 {
     public class PageDto<T>
     {

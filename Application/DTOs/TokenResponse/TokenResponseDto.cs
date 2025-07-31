@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pictures.Application.DTOs.TokenResponse
+namespace Application.DTOs.TokenResponse
 {
     public class TokenResponseDto
     {

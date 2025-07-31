@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pictures.Application.DTOs.Users
+namespace Application.DTOs.Users
 {
     public class UserLoginDto
     {

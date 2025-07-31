@@ -1,12 +1,13 @@
-﻿using Pictures.Application.DTOs.Users;
+﻿using Application.DTOs.Pagination;
+using Application.DTOs.Users;
 
-namespace IDK.Application.Abstractions
+namespace Application.ServiceInterfaces
 {
     public interface IUserService
     {
        
         Task<UserDto> GetById(Guid userId);        
-        Task<List<UserDto>> GetAll();
+        Task<PageDto<UserDto>> GetAll();
         Task<UserDto> Delete(Guid userId);
 
 

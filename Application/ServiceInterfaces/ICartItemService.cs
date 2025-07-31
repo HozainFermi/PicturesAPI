@@ -1,6 +1,6 @@
-﻿using Pictures.Application.DTOs.Carts;
-using Pictures.Application.Models.Pages;
-using Pictures.Application.Models.ProductExtensions;
+﻿using Application.DTOs.Carts;
+using Application.DTOs.Pagination;
+
 
 namespace Application.ServiceInterfaces
 {

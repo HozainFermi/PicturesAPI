@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.DTOs.Auctions
+namespace Domain.Entities
 {
-    public class BidResultDto
+    public class BidEntity:BaseEntity
     {
+
     }
 }

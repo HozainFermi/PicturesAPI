@@ -1,6 +1,8 @@
-﻿using Domain.Entities;
-using
+﻿using Application.DTOs.Products;
+using Domain.Entities;
+
 using Infrastracture.Extensions;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Infrastracture.Extensions
@@ -12,7 +14,7 @@ namespace Infrastracture.Extensions
         {
             if (!string.IsNullOrEmpty(productFilter.Name))
             {
-                query = query.Where(c => EF.Functions.Like(c.Name, $"{productFilter.Name}%"));
+                query = query.Where(c => EF.Functions.Like(c.ProductName, $"{productFilter.Name}%"));
             }
             if (!(productFilter.Id is null))
             {
@@ -20,7 +22,7 @@ namespace Infrastracture.Extensions
             }
             if (!(productFilter.OwnerId is null))
             {
-                query = query.Where(x => x.ProductOwnerId == productFilter.OwnerId);
+                query = query.Where(x => x.Ow == productFilter.OwnerId);
             }
 
             return query;

@@ -1,22 +1,15 @@
-﻿using Application.DTOs.Products;
-using Application.Models.ProductExtensions;
-using IDK.Application.Models.Pages;
-using IDK.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.DTOs.Pagination;
+using Application.DTOs.Products;
 
-namespace IDK.Application.Abstractions
+namespace Application.ServiceInterfaces
 {
     public interface IProductService
     {
-        public Task<ProductCreateDto> Create(ProductCreateDto productDto);
+        public Task<ProductDto> Create(CreateProductRequest productDto);
         public Task<ProductDto> DisableById(Guid id);
         public Task<ProductDto> DeleteById(Guid id);
         public Task<PageDto<ProductPreviewDto>> GetProduct(PageParams pageParams, ProductFilter filter, ProductSortParams sort);
-        public Task<ProductDto> Update (UpdateProductDto updateProductDto);                     
+        public Task<ProductDto> Update (UpdateProductRequest updateProductDto);
 
 
     }

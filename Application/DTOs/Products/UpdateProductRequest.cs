@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pictures.Application.DTOs.Products
+namespace Application.DTOs.Products
 {
-    public class UpdateProductDto
+    public class UpdateProductRequest
     {
         public Guid Id { get; set; }
         public decimal? NewPrice { get; set; }

@@ -1,33 +1,27 @@
-﻿
-using Pictures.Application.Models.ProductExtensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Application.DTOs.Auctions;
+using Application.DTOs.Pagination;
 
-namespace Pictures.Application.ServiceInterfaces
+namespace Application.ServiceInterfaces
 {
-    public interface IAuctionService
-    {
+    
         public interface IAuctionService
         {
           
-            Task<AuctionDto> StartAuctionAsync(Guid auctionId);
-            Task<AuctionDto> CloseAuctionAsync(Guid auctionId);
+           public Task<AuctionDto> StartAuctionAsync(Guid auctionId);
+        public Task<AuctionDto> CloseAuctionAsync(Guid auctionId);
 
-           
-            Task<BidResultDto> PlaceBidAsync(PlaceBidDto bidDto);
-            Task<CurrentBidDto> GetHighestBidAsync(Guid auctionId);
 
-          
-            Task<AuctionDetailsDto> GetAuctionDetailsAsync(Guid auctionId);
-            Task<PageDto<AuctionPreviewDto>> GetActiveAuctionsAsync(PageParams pageParams);
+        public Task<BidResultDto> PlaceBidAsync(PlaceBidDto bidDto);
+        public Task<CurrentBidDto> GetHighestBidAsync(Guid auctionId);
 
-            
-            Task CheckExpiredAuctionsAsync();
+
+        public Task<AuctionDetailsDto> GetAuctionDetailsAsync(Guid auctionId);
+        public Task<PageDto<AuctionPreviewDto>> GetActiveAuctionsAsync(PageParams pageParams);
+
+
+        public Task CheckExpiredAuctionsAsync();
         }
 
 
-    }
+    
 }
