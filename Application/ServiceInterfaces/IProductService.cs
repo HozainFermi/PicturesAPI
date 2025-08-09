@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Pagination;
+﻿using Domain.Models;
 using Application.DTOs.Products;
 
 namespace Application.ServiceInterfaces

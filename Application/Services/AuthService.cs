@@ -1,82 +1,85 @@
 ﻿using Application.DTOs.RefreshToken;
 using Application.DTOs.TokenResponse;
 using Application.DTOs.Users;
+using Application.Extensions;
 using Application.ServiceInterfaces;
 using Domain.Entities;
+using Domain.Exceptions;
 using Domain.RepositoryInterfaces;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 
+
 namespace Application.Services
 {
-    public class AuthService() : IAuthService
+    public class AuthService : IAuthService
     {
         private readonly IConfiguration _configuration;
         private readonly IUserRepository _userRepository;
-        private readonly ICartService _cartService;
-        private readonly HttpContext 
+        private readonly ICartRepository _cartRepository;
+       
+        
         
 
-        public AuthService(IUserRepository userRepo, IConfiguration configuration, ICartService cartService, HttpContext httpContext)
+        public AuthService(IUserRepository userRepo, IConfiguration configuration, ICartRepository cartRepository)
         {
+            _userRepository = userRepo;
+            _cartRepository = cartRepository;
+            _configuration = configuration;
             
         }
+      
 
 
         private Guid cartId;
 
-        public async Task<TokenResponseDto?> Login(UserLoginDto request)
-        {
-            UserEntity user = await context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);
-            if (user == null) { return null; }
-            if (new PasswordHasher<UserEntity>().VerifyHashedPassword(user, user.PasswordHash, request.Password) == PasswordVerificationResult.Failed)
-            {
-                return null;
-            }
+        public async Task<TokenResponseDto?> Login(UserLoginDto request, CancellationToken cancellationToken)
+        {                       
+                //UserEntity user = await context.Users.FirstOrDefaultAsync(u => u.Email == request.Email);//user repo getByEmail
+                UserEntity user = await _userRepository.GetByEmailAsync(request.Email, cancellationToken);
+                
+                if (new PasswordHasher<UserEntity>().VerifyHashedPassword(user, user.PasswordHash, request.Password) == PasswordVerificationResult.Failed)
+                {
+                    return null;
+                }
 
-            TokenResponseDto response = new TokenResponseDto
-            {
-                AccessToken = CreateToken(user),
-                RefreshToken = await GenerateAndSaveRefreshTokenAsync(user),
+                TokenResponseDto response = new TokenResponseDto
+                {
+                    AccessToken = CreateToken(user),
+                    RefreshToken = await GenerateAndSaveRefreshTokenAsync(user,cancellationToken),
 
-            };
-
-           
-
-            return response;
+                };
+                return response;
+            
 
         }
 
 
-        public async Task<UserEntity?> Register(UserDto request)
-        {
-            if (await context.Users.AnyAsync(u => u.Email == request.Email))
-            {
-                return null;
-            }
+        public async Task<UserEntity?> Register(UserDto request, CancellationToken cancellationToken)
+        {         
             UserEntity userEntity = request.ToEntity();
-            //var newcart = cartService.Create(userEntity);
-
+            CartEntity cart = userEntity.InitializeCart();
+     
             var hashedPassword = new PasswordHasher<UserEntity>().HashPassword(userEntity, request.Password);
             userEntity.PasswordHash = hashedPassword;
 
-            var added = await context.Users.AddAsync(userEntity);
 
-            Guid cardid = await cartService.Create(added.Entity);
+           var addedUser = _userRepository.AddUserAsync(userEntity, cancellationToken);
+           var addedCart =  _cartRepository.AddCartAsync(cart,cancellationToken);
+          
+            Task.WaitAll(addedUser,addedCart);
 
-            added.Entity.CartId = cardid;
-
-            await context.SaveChangesAsync();
-
-            return userEntity;
+            return addedUser.Result;
         }
 
-        private async Task<UserEntity?> ValidateRefreshToken(Guid userId, string refreshToken)
+        private async Task<UserEntity?> ValidateRefreshToken(Guid userId, string refreshToken, CancellationToken cancellationToken)
         {
-            var user = await context.Users.FirstOrDefaultAsync(x => x.Id == userId);
+            var user = await _userRepository.GetByIdAsync(userId, cancellationToken);
             if (user is null || user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.UtcNow) { return null; }
 
             return user;
@@ -92,28 +95,27 @@ namespace Application.Services
         }
 
 
-        private async Task<string> GenerateAndSaveRefreshTokenAsync(UserEntity user)
+        private async Task<string> GenerateAndSaveRefreshTokenAsync(UserEntity user,CancellationToken cancellationToken)
         {
-            var refreshToken = GenerateRefreshToken();
-            user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
-            await context.SaveChangesAsync();
+            var refreshToken = GenerateRefreshToken();           
+            await _userRepository.UpdateRefreshTokenAsync(user.Id, refreshToken, cancellationToken);
+           
             return refreshToken;
         }
 
 
-        public async Task<TokenResponseDto?> RefreshTokens(RefreshTokenRequestDto request)
+        public async Task<TokenResponseDto?> RefreshTokens(RefreshTokenRequestDto request, CancellationToken cancellationToken)
         {
 
-            var user = await ValidateRefreshToken(request.UserId, request.RefreshToken);
+            var user = await ValidateRefreshToken(request.UserId, request.RefreshToken,cancellationToken);
             if (user is null) { return null; }
-            var cart = context.Carts.Where(x => x.CartOwnerId == request.UserId).FirstOrDefault();
+            var cart =  await _userRepository.GetCartByUserIdAsync(request.UserId, cancellationToken);//context.Carts.Where(x => x.CartOwnerId == request.UserId).FirstOrDefault();
             if (cart != null) { cartId = cart.Id; }
 
             TokenResponseDto response = new TokenResponseDto
             {
                 AccessToken = CreateToken(user),
-                RefreshToken = await GenerateAndSaveRefreshTokenAsync(user),
+                RefreshToken = await GenerateAndSaveRefreshTokenAsync(user, cancellationToken),
 
             };
 
@@ -125,8 +127,8 @@ namespace Application.Services
         {
             var claims = new List<Claim>
            {
-               new Claim(ClaimTypes.Name, user.FirstName),
-               new Claim(ClaimTypes.Surname, user.LastName),
+               new Claim(ClaimTypes.Name, user.UserName),
+               new Claim(ClaimTypes.Email, user.Email),
                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                new Claim(ClaimTypes.Role,user.Role),
 
@@ -135,13 +137,13 @@ namespace Application.Services
            };
 
             var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(configuration.GetValue<string>("Jwt:Token")!));
+                Encoding.UTF8.GetBytes(_configuration.GetValue<string>("Jwt:Token")!));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512);
 
             var tokenDescriptor = new JwtSecurityToken(
-                issuer: configuration.GetValue<string>("Jwt:Issuer"),
-                audience: configuration.GetValue<string>("Jwt:Audience"),
+                issuer: _configuration.GetValue<string>("Jwt:Issuer"),
+                audience: _configuration.GetValue<string>("Jwt:Audience"),
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(15),
                 signingCredentials: creds

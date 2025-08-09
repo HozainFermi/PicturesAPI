@@ -1,13 +1,14 @@
 ﻿using Application.DTOs.Auctions;
-using Application.DTOs.Pagination;
+using Domain.Models;
 
 namespace Application.ServiceInterfaces
 {
     
         public interface IAuctionService
         {
-          
-           public Task<AuctionDto> StartAuctionAsync(Guid auctionId);
+
+        public Task<AuctionDto> Create(CreateAuctionRequest req);
+        public Task<AuctionDto> StartAuctionAsync(Guid auctionId);
         public Task<AuctionDto> CloseAuctionAsync(Guid auctionId);
 
 

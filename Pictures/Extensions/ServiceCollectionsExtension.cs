@@ -1,20 +1,9 @@
 ﻿using System.Text;
-
-
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
-using Microsoft.AspNetCore.Authentication.BearerToken;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.IdentityModel.Tokens;
-//using System.IdentityModel.Tokens.Jwt; 
+using System.IdentityModel.Tokens.Jwt; 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
-using Npgsql;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Infrastracture.Data;
+
 
 
 

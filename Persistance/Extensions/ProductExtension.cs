@@ -1,11 +1,12 @@
-﻿using Application.DTOs.Products;
+﻿using Application.DTOs.Carts;
+using Domain.Models;
+using Application.DTOs.Products;
 using Domain.Entities;
-
-using Infrastracture.Extensions;
+using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
-namespace Infrastracture.Extensions
+namespace Persistance.Extensions
 {
     public static class ProductExtension
     {
@@ -22,7 +23,7 @@ namespace Infrastracture.Extensions
             }
             if (!(productFilter.OwnerId is null))
             {
-                query = query.Where(x => x.Ow == productFilter.OwnerId);
+                query = query.Where(x => x.ProductOwnerId == productFilter.OwnerId);
             }
 
             return query;
@@ -39,15 +40,14 @@ namespace Infrastracture.Extensions
         {
             if (string.IsNullOrEmpty(orderBy))
             {
-                return x => x.Name;
+                return x => x.ProductName;
             }
             return orderBy switch
             {
                 nameof(ProductEntity.Price) => x => x.Price,
-                nameof(ProductEntity.Count) => x => x.Count,
-                nameof(ProductEntity.Id) => x => x.Id,
-                nameof(ProductEntity.Views) => x => x.Views,
-                _ => x => x.Name
+                nameof(ProductEntity.RemainingNumber) => x => x.RemainingNumber,
+                nameof(ProductEntity.Id) => x => x.Id,               
+                _ => x => x.ProductName
             };
         }
 
@@ -70,12 +70,12 @@ namespace Infrastracture.Extensions
             .Select(p => new ProductPreviewDto
             {
                 Id = p.Id,
-                Name = p.Name,
+                Name = p.ProductName,
                 Price = p.Price,
-                ShortDescription = p.Description.Length > 40 ? p.Description.Substring(0, 40) + "..." : p.Description,
+                ShortDescription = p.ProductDescription.Length > 40 ? p.ProductDescription.Substring(0, 40) + "..." : p.ProductDescription,
                 ProductImageUrl = p.MediaPathsJson.FirstOrDefault(),
 
-                OwnerName = $"{p.ProductOwner.FirstName} {p.ProductOwner.LastName}",
+                OwnerName = $"{p.ProductOwner.UserName}",
                 OwnerAvatarUrl = p.ProductOwner.MediaPathsJson.FirstOrDefault()
             }
                 )
@@ -104,11 +104,10 @@ namespace Infrastracture.Extensions
             var res = await query.Skip(skip).Take(pagesize)
             .Select(p => new CartItemPreviewDto
             {
-                CartItemId = p.Id,
-                CartId = p.CartId,
+                CartItemId = p.Id,               
                 MediaPath = p.Product.MediaPathsJson.FirstOrDefault(),
-                Title = p.Product.Name,
-                Price = p.FinalPrice,
+                Title = p.Product.ProductName,
+                Price = p.UnitPrice,
                 ProductId = p.ProductId,
                 Quantity = p.Quantity
             }

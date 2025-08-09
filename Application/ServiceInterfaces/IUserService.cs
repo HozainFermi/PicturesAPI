@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Pagination;
+﻿using Domain.Models;
 using Application.DTOs.Users;
 
 namespace Application.ServiceInterfaces
@@ -7,7 +7,7 @@ namespace Application.ServiceInterfaces
     {
        
         Task<UserDto> GetById(Guid userId);        
-        Task<PageDto<UserDto>> GetAll();
+        Task<PageDto<UserDto>> GetAll(PageParams pageParams);
         Task<UserDto> Delete(Guid userId);
 
 

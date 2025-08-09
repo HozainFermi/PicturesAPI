@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Infrastracture
+namespace Persistance
 {
     public static class DependensyInjection
     {

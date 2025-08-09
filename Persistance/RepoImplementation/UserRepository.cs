@@ -1,63 +1,180 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Domain.Models;
 using Domain.Entities;
+using Domain.Exceptions;
+using Domain.Exceptions.RepoException;
 using Domain.RepositoryInterfaces;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Persistance.Data;
+using Persistance.Extensions;
 
-namespace Infrastracture.RepoImplementation
+namespace Persistance.RepoImplementation
 {
     public class UserRepository : IUserRepository
     {
-        public Task<UserEntity> DeleteById(Guid id)
+        PicturesDbContext _dbContext;
+
+        public UserRepository(PicturesDbContext context)
         {
-            throw new NotImplementedException();
+            _dbContext = context;
         }
 
-        public Task<UserEntity> EditBirdthDate(Guid id, DateTime newbirdthdate)
+        public async Task<UserEntity> AddUserAsync(UserEntity user, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var result = await _dbContext.Users.AddAsync(user, cancellationToken);
+            _dbContext.SaveChanges();
+
+            return result.Entity;
         }
 
-        public Task<UserEntity> EditEmail(Guid id, string newemail)
+        public async Task<UserEntity> DeleteByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                UserEntity? user = await _dbContext.Users.FindAsync(id, cancellationToken);
+
+                if (user == null) { throw new EntityNotFoundException(id, typeof(UserEntity)); }
+                return user;
+            }
+            catch (Exception ex) { throw new RepositoryException("Faild to delete user by Id", ex); }
+
         }
 
-        public Task<UserEntity> EditPassword(Guid id, string newpassword)
+        public async Task<UserEntity> GetByEmailAsync(string email, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                UserEntity? user = await _dbContext.Users.Where(u => u.Email == email).FirstOrDefaultAsync(cancellationToken);
+                if (user == null) { throw new EntityNotFoundException(email, typeof(UserEntity)); }
+                return user;
+            }
+            catch(Exception ex) { throw new RepositoryException("Faild to get user by email", ex); }
         }
 
-        public Task<UserEntity> EditUsername(Guid id, string newusername)
+        public async Task<UserEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                UserEntity? user = await _dbContext.Users.FindAsync(id);
+                if (user == null) { throw new EntityNotFoundException(id, typeof(UserEntity)); }
+                return user; 
+            }
+            catch(Exception ex) { throw new RepositoryException("Faild to get user by id", ex); }
         }
 
-        public Task<UserEntity> GetByEmail(string email)
+        public async Task<UserEntity[]> GetByUsernameAsync(string username, PageParams pageParams ,CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var users = await _dbContext.Users.AsNoTracking().Page(username, pageParams);
+                if (users == null) { throw new EntityNotFoundException(username, typeof(UserEntity)); }                                                
+                return users;
+            }
+            catch (Exception ex) { throw new RepositoryException("Faild to get users by username",ex); }
+            
+
+            
         }
 
-        public Task<UserEntity> GetById(Guid id)
+        public async Task<CartEntity> GetCartByUserIdAsync(Guid userId, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                CartEntity? cart = await _dbContext.Carts.Where(c => c.OwnerId == userId).FirstAsync();
+                if (cart == null) { throw new EntityNotFoundException(userId, typeof(CartEntity)); }
+                return cart;
+            }
+            catch (Exception ex) { throw new RepositoryException("Faild to get cart by userId", ex); }
         }
 
-        public Task<UserEntity> GetByUsername(string username)
+        public async Task<OrderEntity[]> GetUserOrdersAsync(Guid id, PageParams pageParams ,CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var user = await _dbContext.Users
+                .AsNoTracking()
+                .Include(u => u.Orders)
+                .FirstOrDefaultAsync(u => u.Id == id);
+                if (user == null) { throw new EntityNotFoundException(id, typeof(UserEntity)); }
+
+                OrderEntity[] orders = user?.Orders?.ToArray() ?? Array.Empty<OrderEntity>();
+
+                return orders;
+            
+            }
+            catch (Exception ex) { throw new RepositoryException("Faild to get user`s orders by userId", ex); }
         }
 
-        public Task<CartEntity> GetCartByUserId(Guid userId)
+        public async Task<UserEntity> UpdateBirdthDateAsync(Guid id, DateTime newBirdthdate, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                UserEntity? user = await _dbContext.Users.FindAsync(id, cancellationToken);
+                if (user == null) { throw new EntityNotFoundException(id,typeof(UserEntity)); }
+                user.BirthDate = newBirdthdate;
+                _dbContext.SaveChanges();
+                return user;
+
+            }
+            catch (Exception ex) { throw new RepositoryException("Faild to update user's birdthdate", ex); }
         }
 
-        public Task<List<OrderEntity>> GetUserOrders(Guid id)
+        public async Task<UserEntity> UpdateEmailAsync(Guid id, string newEmail, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                UserEntity? user = await _dbContext.Users.FindAsync(id, cancellationToken);
+                if (user == null) { throw new EntityNotFoundException(id, typeof(UserEntity)); }
+                user.Email= newEmail;
+                _dbContext.SaveChanges();
+                return user;
+
+            }
+            catch (Exception ex) { throw new RepositoryException("Faild to update user's emaill", ex); }
+        }
+
+        public async Task<UserEntity> UpdatePasswordAsync(Guid id, string newPassword, CancellationToken cancellationToken)
+        {
+            try
+            {
+                UserEntity? user = await _dbContext.Users.FindAsync(id, cancellationToken);
+                if (user == null) { throw new EntityNotFoundException(id, typeof(UserEntity)); }
+                var hashedPassword = new PasswordHasher<UserEntity>().HashPassword(user, newPassword);
+                user.PasswordHash = hashedPassword;
+                _dbContext.SaveChanges();
+                return user;
+
+            }
+            catch (Exception ex) { throw new RepositoryException("Faild to update user's birdthdate", ex); }
+        }
+
+        public async Task<UserEntity> UpdateRefreshTokenAsync(Guid id, string newRefreshToken, CancellationToken cancellationToken)
+        {
+            try
+            {
+               var found = await _dbContext.Users.FindAsync(id, cancellationToken);
+                if (found == null) { throw new EntityNotFoundException(id, typeof(UserEntity)); }
+                found.RefreshToken = newRefreshToken;
+                found.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(7);
+                _dbContext.SaveChanges();
+                return found;
+
+            }
+            catch (Exception ex) { throw new RepositoryException("Faild to update user's refresh token", ex); }
+        }
+
+        public async Task<UserEntity> UpdateUsernameAsync(Guid id, string newUsername, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var found = await _dbContext.Users.FindAsync(id, cancellationToken);
+                if (found == null) { throw new EntityNotFoundException(id, typeof(UserEntity)); }
+                found.UserName= newUsername;
+                _dbContext.SaveChanges();
+                return found;
+
+            }
+            catch (Exception ex) { throw new RepositoryException("Faild to update user's username", ex); }
         }
     }
 }

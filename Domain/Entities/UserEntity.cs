@@ -33,5 +33,24 @@ namespace Domain.Entities
         public ICollection<OrderEntity>? Orders { get; set; }
 
 
+        public CartEntity InitializeCart()
+        {
+            Guid guid = Guid.NewGuid();
+            CartId = guid;
+
+            return new CartEntity
+            {
+                CartItems = new List<CartItemEntity>(),
+                CartOwner = this,
+                CreatedAt = DateTime.UtcNow,
+                Id = guid,
+                IsActive = true,
+                OwnerId = this.Id                
+            };
+
+        }
+
+
+
     }
 }
