@@ -1,4 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Application.DTOs.RefreshToken;
+using Application.DTOs.TokenResponse;
+using Application.DTOs.Users;
+using Application.Extensions;
+using Application.ServiceInterfaces;
+using Domain.Exceptions;
+using Domain.Exceptions.RepoException;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 
@@ -10,62 +17,63 @@ namespace Pictures.Controllers
     {
 
         IAuthService _authService;
-        ICartService _cartService;
+        
 
-        public AuthController(IAuthService authService, ICartService cartService)
+        public AuthController(IAuthService authService)
         {
-
-            _authService = authService;
-            _cartService = cartService;
+            _authService = authService;            
         }
-
 
 
         [HttpPost]
         [Route("register")]
-
-        public async Task<ActionResult<UserDto>> Register(UserDto request)
+        public async Task<ActionResult<UserDto>> Register(UserDto request, CancellationToken cancellationToken)
         {
-            var user = await _authService.Register(request);
-            if (user == null)
+            try
             {
-                return BadRequest("User with such email address already exists");
-            }
+                var user = await _authService.Register(request, cancellationToken);               
+                return Ok(user.ToDto());
 
-            await _cartService.Create(user);
-            return Ok(user.ToDto());
+            }
+            catch (UniqueConstraintException ex) { return BadRequest("User with such email address already exists"); }   
+            catch (Exception ex) { return BadRequest("Something is wrong"); }
         }
+
 
         [HttpPost("refresh-token")]
-        public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto refreshTokenRequestDto)
+        public async Task<ActionResult<TokenResponseDto>> RefreshToken(RefreshTokenRequestDto refreshTokenRequestDto,CancellationToken cancellationToken)
         {
-            var result = await _authService.RefreshTokens(refreshTokenRequestDto);
-            if (result is null || result.AccessToken is null || result.RefreshToken is null) { return Unauthorized("Invalid refresh token."); }//опять логинься
-            return Ok(result);
-        }
+            try
+            {
+                var result = await _authService.RefreshTokens(refreshTokenRequestDto, cancellationToken);
+                if (result is null || result.AccessToken is null || result.RefreshToken is null) { return Unauthorized("Invalid refresh token."); }//опять логинься
+                return Ok(result);
+            }
 
+            catch (EntityNotFoundException ex) { return Unauthorized("User is not found."); }
+            catch (Exception ex) { return Unauthorized("Something is wrong."); }
+        }
 
 
         [HttpPost]
         [Route("login")]
-        public async Task<ActionResult<string>> Login(UserLoginDto request)
+        public async Task<ActionResult<string>> Login(UserLoginDto request, CancellationToken cancellationToken)
         {
-            var result = await _authService.Login(request);
-            if (result == null)
+            try
             {
+                var result = await _authService.Login(request, cancellationToken);
+               
+                Response.Cookies.Append("_ck", result.AccessToken, new CookieOptions
+                {
+                    HttpOnly = true,
+                    //Secure = true,!!! TEST
+                    SameSite = SameSiteMode.Strict
+                });
 
-                return BadRequest("Something is wrong");
-
+                return Ok(result);
             }
-
-            Response.Cookies.Append("_ck", result.AccessToken, new CookieOptions
-            {
-                HttpOnly = true,
-                //Secure = true,!!! TEST
-                SameSite = SameSiteMode.Strict
-            });
-
-            return Ok(result);
+            catch(EntityNotFoundException ex) {return BadRequest("User does not exist"); }
+            catch(Exception ex) { return BadRequest("Something is wrong"); }
         }
     }
 }

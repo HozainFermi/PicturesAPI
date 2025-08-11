@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.Orders;
-using Domain.Models;
+using Domain.Models.Pagination;
 
 namespace Application.ServiceInterfaces
 {

@@ -1,6 +1,6 @@
-﻿using Domain.Models;
-using Domain.Entities;
+﻿using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Domain.Models.Pagination;
 
 namespace Persistance.Extensions
 {

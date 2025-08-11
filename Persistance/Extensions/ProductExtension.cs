@@ -1,10 +1,10 @@
 ﻿using Application.DTOs.Carts;
-using Domain.Models;
-using Application.DTOs.Products;
 using Domain.Entities;
 using Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Domain.Models.Pagination;
+using Domain.Models.Products;
 
 namespace Persistance.Extensions
 {

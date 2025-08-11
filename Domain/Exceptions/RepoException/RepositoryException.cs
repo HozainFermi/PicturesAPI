@@ -10,6 +10,10 @@ namespace Domain.Exceptions.RepoException
     {
         public RepositoryException(string message, Exception inner)
             : base($"Repository error: {message}", inner) { }
+        public RepositoryException(string message) : base($"Repository error:{message}") { }
+        
+            
+        
     }
 
 }

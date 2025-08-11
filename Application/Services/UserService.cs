@@ -1,6 +1,6 @@
 ﻿using Application.DTOs.Users;
 using Application.ServiceInterfaces;
-using Domain.Models;
+using Domain.Models.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;

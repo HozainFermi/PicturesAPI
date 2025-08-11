@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.Auctions;
-using Domain.Models;
+using Domain.Models.Pagination;
 
 namespace Application.ServiceInterfaces
 {

@@ -1,5 +1,5 @@
-﻿using Domain.Models;
-using Application.DTOs.Users;
+﻿using Application.DTOs.Users;
+using Domain.Models.Pagination;
 
 namespace Application.ServiceInterfaces
 {

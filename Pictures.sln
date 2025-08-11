@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pictures", "Pictures\Pictures.csproj", "{AB578C36-F226-4242-BBB5-D079C7AED794}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E5FB3F7D-C97F-4C2A-B17A-32251A02DC5E} = {E5FB3F7D-C97F-4C2A-B17A-32251A02DC5E}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csproj", "{CBB17F50-FEB4-49C2-A442-67650C2485AB}"
 EndProject

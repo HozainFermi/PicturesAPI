@@ -27,9 +27,9 @@ namespace Persistance.Data
         //public DbSet<RaffleEntity> Raffles { get; set; } = null!; 
        // public DbSet<CommentEntity> Comments { get; set; } = null!;
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
             
-        }
+        //}
     }
 }

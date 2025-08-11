@@ -1,6 +1,6 @@
 ﻿using Domain.Entities;
 using Domain.Exceptions.RepoException;
-using Domain.Models;
+using Domain.Models.Pagination;
 using Domain.RepositoryInterfaces;
 using Persistance.Data;
 using System;

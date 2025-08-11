@@ -36,7 +36,7 @@ namespace Application.Services
       
 
 
-        private Guid cartId;
+       // private Guid cartId;
 
         public async Task<TokenResponseDto?> Login(UserLoginDto request, CancellationToken cancellationToken)
         {                       
@@ -109,8 +109,8 @@ namespace Application.Services
 
             var user = await ValidateRefreshToken(request.UserId, request.RefreshToken,cancellationToken);
             if (user is null) { return null; }
-            var cart =  await _userRepository.GetCartByUserIdAsync(request.UserId, cancellationToken);//context.Carts.Where(x => x.CartOwnerId == request.UserId).FirstOrDefault();
-            if (cart != null) { cartId = cart.Id; }
+            //var cart =  await _userRepository.GetCartByUserIdAsync(request.UserId, cancellationToken);//context.Carts.Where(x => x.CartOwnerId == request.UserId).FirstOrDefault();
+           // if (cart != null) { cartId = cart.Id; }
 
             TokenResponseDto response = new TokenResponseDto
             {
