@@ -1,18 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using IDK.Application.Models.Orders;
-using IDK.Application.Models.Users;
+﻿using Application.DTOs.Users;
+using Domain.Models.Pagination;
 
-namespace IDK.Application.Abstractions
+namespace Application.ServiceInterfaces
 {
     public interface IUserService
     {
        
         Task<UserDto> GetById(Guid userId);        
-        Task<List<UserDto>> GetAll();
+        Task<PageDto<UserDto>> GetAll(PageParams pageParams);
         Task<UserDto> Delete(Guid userId);
 
 

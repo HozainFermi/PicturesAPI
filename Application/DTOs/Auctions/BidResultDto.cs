@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace IDK.Application.ProductExtensions
+namespace Application.DTOs.Auctions
 {
-    public enum SortDirection
+    public class BidResultDto
     {
-        Ascending,
-        Descending
     }
 }

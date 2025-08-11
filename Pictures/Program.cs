@@ -1,5 +1,5 @@
-
-
+using Application;
+using Persistance;
 
 namespace Pictures
 {
@@ -11,6 +11,7 @@ namespace Pictures
 
             // Add services to the container.
 
+
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddCors(opt =>
@@ -21,12 +22,14 @@ namespace Pictures
                 });
             });
 
+            builder.Services
+                .AddPersistance(builder.Configuration)
+                .AddApplication();
+
             builder
                 .AddSwagger()
-                .AddData()
-                .AddApplicationServices()
-                .AddIntegrationServices()
                 .AddBearerAuthentication();
+            
 
 
             var app = builder.Build();

@@ -1,20 +1,9 @@
 ﻿using System.Text;
-
-
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
-using Microsoft.AspNetCore.Authentication.BearerToken;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.IdentityModel.Tokens;
-//using System.IdentityModel.Tokens.Jwt; 
+using System.IdentityModel.Tokens.Jwt; 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure.Internal;
-using Npgsql;
-using Microsoft.AspNetCore.Cors.Infrastructure;
-using Infrastracture;
+
 
 
 
@@ -57,44 +46,7 @@ public static class ServiceCollectionsExtensions
 
         return builder;
     }
-
-    public static WebApplicationBuilder AddData(this WebApplicationBuilder builder)
-    {
-        var dataSourceBuilder = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("IDK"));
-        dataSourceBuilder.EnableDynamicJson();
-
-        builder.Services.AddDbContext<PicturesDbContext>(opt =>
-            opt.UseNpgsql(dataSourceBuilder.Build()));
-
-        return builder;
-    }
-
-    public static WebApplicationBuilder AddApplicationServices(this WebApplicationBuilder builder)
-    {
-        //builder.Services.AddScoped<ICartService, CartService>();
-        //builder.Services.AddScoped<IOrderService, OrderService>();
-        //builder.Services.AddScoped<IAuthService, AuthService>();
-        //builder.Services.AddScoped<IProductService, ProductService>();
-        //builder.Services.AddScoped<ICartItemService, CartItemService>();
-        return builder;
-    }
-
-    public static WebApplicationBuilder AddInfrastractureServices(this WebApplicationBuilder builder)
-    {
-        return builder;
-    }
-
-    public static WebApplicationBuilder AddIntegrationServices(this WebApplicationBuilder builder)
-    {
-        return builder;
-    }
-
-    public static WebApplicationBuilder AddBackgroundService(this WebApplicationBuilder builder)
-    {
-        // builder.Services.AddHostedService<CreateOrderConsumer>();
-
-        return builder;
-    }
+    
 
     public static WebApplicationBuilder AddBearerAuthentication(this WebApplicationBuilder builder)
     {
@@ -121,6 +73,11 @@ public static class ServiceCollectionsExtensions
                      OnAuthenticationFailed = ctx =>
                      {
                          Console.WriteLine($"Algorithm used: {ctx.HttpContext.Request.Headers["Authorization"]}");
+                         return Task.CompletedTask;
+                     },
+                     OnMessageReceived = ctx =>
+                     {
+                         ctx.Token = ctx.Request.Cookies["_ck"];
                          return Task.CompletedTask;
                      }
                  };

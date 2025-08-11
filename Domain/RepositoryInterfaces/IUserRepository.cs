@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Models.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,17 +8,25 @@ using System.Threading.Tasks;
 
 namespace Domain.RepositoryInterfaces
 {
-    internal interface IUserRepository
+    public interface IUserRepository
     {
-        public Task<UserEntity> GetById(Guid id);
-        public Task<UserEntity> GetByUsername(string username);
-        public Task<UserEntity> GetByEmail(string email);
-        public Task<List<OrderEntity>> GetUserOrders(Guid id);
-        public Task<UserEntity> EditUsername(Guid id,string newusername);
-        public Task<UserEntity> EditEmail(Guid id, string newemail);
-        public Task<UserEntity> EditPassword(Guid id,string newpassword);
-        public Task<UserEntity> EditBirdthDate(Guid id,DateTime newbirdthdate);
-        public Task<UserEntity> DeleteById(Guid id);
+        public Task<UserEntity> AddUserAsync(UserEntity user, CancellationToken cancellationToken);
+
+        public Task<UserEntity> GetByIdAsync(Guid id,CancellationToken cancellationToken);
+        public Task<UserEntity[]> GetByUsernameAsync(string username, PageParams pageParams, CancellationToken cancellationToken);
+        public Task<UserEntity> GetByEmailAsync(string email, CancellationToken cancellationToken);
+        public Task<OrderEntity[]> GetUserOrdersAsync(Guid id, PageParams pageParams, CancellationToken cancellationToken);
+        public Task<CartEntity> GetCartByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+
+        public Task<UserEntity> UpdateUserAsync(UserEntity user, CancellationToken cancellationToken);
+        public Task<UserEntity> UpdateUsernameAsync(Guid id,string newUsername, CancellationToken cancellationToken);
+        public Task<UserEntity> UpdateEmailAsync(Guid id, string newEmail, CancellationToken cancellationToken);
+        public Task<UserEntity> UpdatePasswordAsync(Guid id,string newPassword, CancellationToken cancellationToken);
+        public Task<UserEntity> UpdateBirdthDateAsync(Guid id,DateTime newBirdthdate, CancellationToken cancellationToken);
+
+        public Task<UserEntity> UpdateRefreshTokenAsync(Guid id, string newRefreshToken, CancellationToken cancellationToken);
+
+        public Task<UserEntity> DeleteByIdAsync(Guid id, CancellationToken cancellationToken);
 
     }
 }

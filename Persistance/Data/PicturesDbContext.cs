@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Infrastracture
+namespace Persistance.Data
 {
     public class PicturesDbContext: DbContext
     {
@@ -26,5 +26,10 @@ namespace Infrastracture
         //TODO
         //public DbSet<RaffleEntity> Raffles { get; set; } = null!; 
        // public DbSet<CommentEntity> Comments { get; set; } = null!;
+
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+            
+        //}
     }
 }

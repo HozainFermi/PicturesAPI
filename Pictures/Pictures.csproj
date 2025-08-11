@@ -16,19 +16,17 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.7.0" />
+	  <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.13.0" />
 	  <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
 	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="8.0.0" />
 	  <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.0.0" />
-	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.7.0" />
+	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.13.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastracture\Infrastracture.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
+	  <ProjectReference Include="..\Persistance\Persistance.csproj" />
   </ItemGroup>
 
 </Project>

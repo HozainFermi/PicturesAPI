@@ -1,18 +1,17 @@
 ﻿using Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Models.Pagination;
 
 namespace Domain.RepositoryInterfaces
 {
     public interface ICartRepository
     {
-        public Task<ICollection<CartItemEntity>> GetCartItemsByUserId(int userId);
-        public Task<CartEntity> GetCartById(int id);
-        public Task<CartEntity> GetCartByUserId(int userId);
+        public Task<CartEntity> AddCartAsync(CartEntity cart, CancellationToken cancellationToken);
 
-        public Task<CartEntity> CleanCartBy
+        public Task<CartItemEntity[]> GetCartItemsByUserIdAsync(Guid userId, PageParams pageParams ,CancellationToken cancellationToken);
+        public Task<CartEntity> GetCartByIdAsync(Guid id, CancellationToken cancellationToken);
+        public Task<CartEntity> GetCartByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+        public Task<UserEntity> GetUserByCartIdAsync(Guid cartId, CancellationToken cancellationToken);
+
+        public Task<CartEntity> CleanCartByIdAsync(Guid cartId, CancellationToken cancellationToken);
     }
 }

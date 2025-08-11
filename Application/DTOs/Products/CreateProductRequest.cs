@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.Products
 {
-    public class ProductCreateDto
+    public class CreateProductRequest
     {
      
         public Guid ProductOwnerId { get; set; }

@@ -1,9 +1,5 @@
 ﻿using Application.DTOs.Orders;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Domain.Models.Pagination;
 
 namespace Application.ServiceInterfaces
 {
@@ -11,7 +7,7 @@ namespace Application.ServiceInterfaces
     {
         Task<OrderDto> Create(CreateOrderDto order);
         Task<OrderDto> GetById(Guid orderId);
-        Task<List<OrderDto>> GetByUser(Guid userId);
+        Task<PageDto<OrderDto>> GetByUserId(PageParams pageParams,Guid userId);
         Task<List<OrderDto>> GetAll();
         Task<OrderDto> Reject(Guid orderId);
         

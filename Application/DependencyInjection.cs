@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Application.ServiceInterfaces;
+using Application.Services;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +11,14 @@ namespace Application
 {
     public static class DependencyInjection
     {
-        public static void AddInfrastracture(IServiceCollection services)
+        public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            //services.Add();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IAuthService, AuthService>();
+
+            return services;
+
         }
     }
 }
