@@ -51,72 +51,72 @@ namespace Persistance.Extensions
             };
         }
 
-        public static async Task<PageDto<ProductPreviewDto>> Page(this IQueryable<ProductEntity> query, PageParams pageParams)
+        public static async Task<ProductEntity[]> Page(this IQueryable<ProductEntity> query, PageParams pageParams)
         {
 
             query.Include(p => p.ProductOwner);
 
-            var total = await query.CountAsync();
-            if (total == 0)
-            {
-                return null;
-            }
+            //var total = await query.CountAsync();
+            //if (total == 0)
+            //{
+            //    return null;
+            //}
 
             var page = pageParams.Page ?? 1;
             var pagesize = pageParams.PageSize ?? 10;
 
             var skip = (page - 1) * pagesize;
             var res = await query.Skip(skip).Take(pagesize)
-            .Select(p => new ProductPreviewDto
-            {
-                Id = p.Id,
-                Name = p.ProductName,
-                Price = p.Price,
-                ShortDescription = p.ProductDescription.Length > 40 ? p.ProductDescription.Substring(0, 40) + "..." : p.ProductDescription,
-                ProductImageUrl = p.MediaPathsJson.FirstOrDefault(),
+            //.Select(p => new ProductPreviewDto
+            //{
+            //    Id = p.Id,
+            //    Name = p.ProductName,
+            //    Price = p.Price,
+            //    ShortDescription = p.ProductDescription.Length > 40 ? p.ProductDescription.Substring(0, 40) + "..." : p.ProductDescription, //TO SERVICE
+            //    ProductImageUrl = p.MediaPathsJson.FirstOrDefault(),
 
-                OwnerName = $"{p.ProductOwner.UserName}",
-                OwnerAvatarUrl = p.ProductOwner.MediaPathsJson.FirstOrDefault()
-            }
-                )
+            //    OwnerName = $"{p.ProductOwner.UserName}",
+            //    OwnerAvatarUrl = p.ProductOwner.MediaPathsJson.FirstOrDefault()
+            //}
+            //    )
                 .ToArrayAsync();
 
-            var pageResult = new PageDto<ProductPreviewDto>(res, total);
+            //var pageResult = new PageDto<ProductPreviewDto>(res, total);
 
-            return pageResult;
+            return res;
         }
 
-        public static async Task<PageDto<CartItemPreviewDto>> Page(this IQueryable<CartItemEntity> query, PageParams pageParams)
+        public static async Task<CartItemEntity[]> Page(this IQueryable<CartItemEntity> query, PageParams pageParams)
         {
 
             query.Include(p => p.Product);
 
-            var total = await query.CountAsync();
-            if (total == 0)
-            {
-                return null;
-            }
+            //var total = await query.CountAsync();
+            //if (total == 0)
+            //{
+            //    return null;
+            //}
 
             var page = pageParams.Page ?? 1;
             var pagesize = pageParams.PageSize ?? 10;
 
             var skip = (page - 1) * pagesize;
             var res = await query.Skip(skip).Take(pagesize)
-            .Select(p => new CartItemPreviewDto
-            {
-                CartItemId = p.Id,               
-                MediaPath = p.Product.MediaPathsJson.FirstOrDefault(),
-                Title = p.Product.ProductName,
-                Price = p.UnitPrice,
-                ProductId = p.ProductId,
-                Quantity = p.Quantity
-            }
-                )
+            //.Select(p => new CartItemPreviewDto
+            //{
+            //    CartItemId = p.Id,               
+            //    MediaPath = p.Product.MediaPathsJson.FirstOrDefault(),    //TO SERVICE
+            //    Title = p.Product.ProductName,
+            //    Price = p.UnitPrice,
+            //    ProductId = p.ProductId,
+            //    Quantity = p.Quantity
+            //}
+            //    )
                 .ToArrayAsync();
 
-            var pageResult = new PageDto<CartItemPreviewDto>(res, total);
+            //var pageResult = new PageDto<CartItemPreviewDto>(res, total);
 
-            return pageResult;
+            return res;
         }
 
 

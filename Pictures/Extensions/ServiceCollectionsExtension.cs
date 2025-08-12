@@ -50,7 +50,7 @@ public static class ServiceCollectionsExtensions
 
     public static WebApplicationBuilder AddBearerAuthentication(this WebApplicationBuilder builder)
     {
-        builder.Services
+        builder.Services             
              .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
              .AddJwtBearer(options =>
              {
@@ -84,6 +84,13 @@ public static class ServiceCollectionsExtensions
 
              });
 
+        builder.Services.AddAuthorization(options =>
+        {
+            options.AddPolicy("Admin", policy =>
+            {
+                policy.Requirements.Add();
+            });
+        });
 
         return builder;
 

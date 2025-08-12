@@ -47,9 +47,17 @@ namespace Persistance.RepoImplementation
             catch(DbException ex) {throw new RepositoryException("Faild to delete product", ex); }
         }
 
-        public async Task<PageDto<ProductPreviewDto>> GetProductAsync(ProductFilter filter, ProductSortParams sortParams, PageParams pageParams, CancellationToken cancellationToken)
+        public async Task<ProductEntity[]> GetProductAsync(ProductFilter filter, ProductSortParams sortParams, PageParams pageParams, CancellationToken cancellationToken)
         {
-          return await _dbContext.Products.Filter(filter).Sort(sortParams).Page(pageParams);
+            try
+            {
+                return await _dbContext.Products.Filter(filter).Sort(sortParams).Page(pageParams);
+            }
+            catch (DbException ex) 
+            {
+                _logger.LogError(ex, "Ошибка при взятии товара c фильтром - Name:{ProductName},Id:{ProductId},OwnerId:{OwnerId}",filter.Name,filter.Id,filter.OwnerId);
+                throw new RepositoryException("Faild to get products", ex); 
+            }
         }
 
         public async Task<ProductEntity> UpdateProductAsync(ProductEntity product, CancellationToken cancellationToken)
