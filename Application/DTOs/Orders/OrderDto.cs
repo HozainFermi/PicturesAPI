@@ -10,6 +10,7 @@ namespace Application.DTOs.Orders
     {
         public Guid OrderId { get; set; }
         public Guid ProductId { get; set; }
+        public Guid ProductOwnerId { get; set; }
         public string ProductName { get; set; }
         public decimal Cost { get; set; }
         public int Count { get; set; }

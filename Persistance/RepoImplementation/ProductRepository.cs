@@ -16,9 +16,9 @@ namespace Persistance.RepoImplementation
     public class ProductRepository : IProductRepository
     {
         PicturesDbContext _dbContext;
-        private readonly ILogger _logger;
+        private readonly ILogger<ProductRepository> _logger;
 
-        public ProductRepository(PicturesDbContext picturesDbContext ,ILogger logger)
+        public ProductRepository(PicturesDbContext picturesDbContext ,ILogger<ProductRepository> logger)
         {
             _dbContext= picturesDbContext;
             _logger = logger;
@@ -34,6 +34,21 @@ namespace Persistance.RepoImplementation
             catch (Exception ex) { throw new RepositoryException("Faild to add product", ex); }
         }
 
+        public async Task<ProductEntity> DisableProductAsync(Guid id, CancellationToken cancellationToken)
+        {
+            ProductEntity? foundProduct = await _dbContext.Products.FindAsync(id);
+            if (foundProduct != null) { throw new EntityNotFoundException(id, typeof(ProductEntity)); }
+
+            try
+            {
+                foundProduct.IsActive = false;
+                await _dbContext.SaveChangesAsync();
+                return foundProduct;
+            }
+            catch (DbException ex) { throw new RepositoryException("Faild to disable product", ex); }
+
+        }
+
         public async Task<ProductEntity> DeleteProductAsync(Guid id, CancellationToken cancellationToken)
         {
             ProductEntity? foundProduct = await _dbContext.Products.FindAsync(id);
@@ -47,9 +62,17 @@ namespace Persistance.RepoImplementation
             catch(DbException ex) {throw new RepositoryException("Faild to delete product", ex); }
         }
 
-        public async Task<PageDto<ProductPreviewDto>> GetProductAsync(ProductFilter filter, ProductSortParams sortParams, PageParams pageParams, CancellationToken cancellationToken)
+        public async Task<ProductEntity[]> GetProductAsync(ProductFilter filter, ProductSortParams sortParams, PageParams pageParams, CancellationToken cancellationToken)
         {
-          return await _dbContext.Products.Filter(filter).Sort(sortParams).Page(pageParams);
+            try
+            {
+                return await _dbContext.Products.Filter(filter).Sort(sortParams).Page(pageParams);
+            }
+            catch (DbException ex) 
+            {
+                _logger.LogError(ex, "Ошибка при взятии товара c фильтром - Name:{ProductName},Id:{ProductId},OwnerId:{OwnerId}",filter.Name,filter.Id,filter.OwnerId);
+                throw new RepositoryException("Faild to get products", ex); 
+            }
         }
 
         public async Task<ProductEntity> UpdateProductAsync(ProductEntity product, CancellationToken cancellationToken)

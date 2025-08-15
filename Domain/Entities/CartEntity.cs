@@ -10,6 +10,7 @@ namespace Domain.Entities
     {
         public ICollection<CartItemEntity> CartItems { get; set; } = new List<CartItemEntity>();
         public Guid OwnerId { get; set; }
+        public decimal Price { get; set; } = 0;
         public UserEntity CartOwner { get; set; }
        
     }

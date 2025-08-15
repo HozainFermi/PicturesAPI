@@ -15,9 +15,9 @@ namespace Persistance.RepoImplementation
     public class UserRepository : IUserRepository
     {
         PicturesDbContext _dbContext;
-        ILogger _logger;
+        ILogger<UserRepository> _logger;
 
-        public UserRepository(PicturesDbContext context, ILogger logger)
+        public UserRepository(PicturesDbContext context, ILogger<UserRepository> logger)
         {
             _dbContext = context;
             _logger = logger;
@@ -270,4 +270,4 @@ namespace Persistance.RepoImplementation
         }
         }
     }
-}
+

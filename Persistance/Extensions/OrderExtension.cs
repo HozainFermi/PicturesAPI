@@ -1,23 +1,19 @@
 ﻿using Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Domain.Models.Pagination;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace Persistance.Extensions
 {
-    public static class UserExtension
+    public static class OrderExtension
     {
-        public static async Task<UserEntity[]> Page(this IQueryable<UserEntity> query, string username ,PageParams pageParams)
+        public static async Task<OrderEntity[]> Page(this IQueryable<OrderEntity> query, PageParams pageParams)
         {
-
-            
-            query.Where(e => e.UserName.Contains(username));
-
-            //var total = await query.CountAsync();
-            //if (total == 0)
-            //{
-            //    return null;
-            //}
-
+                       
             var page = pageParams.Page ?? 1;
             var pagesize = pageParams.PageSize ?? 10;
 
