@@ -1,5 +1,5 @@
 ﻿using Application.DTOs.Carts;
-using Application.DTOs.Pagination;
+using Domain.Models.Pagination;
 
 
 namespace Application.ServiceInterfaces

@@ -1,5 +1,6 @@
-﻿using Application.DTOs.Pagination;
-using Application.DTOs.Products;
+﻿using Application.DTOs.Products;
+using Domain.Models.Pagination;
+using Domain.Models.Products;
 
 namespace Application.ServiceInterfaces
 {

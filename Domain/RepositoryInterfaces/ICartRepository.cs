@@ -1,14 +1,19 @@
 ﻿using Domain.Entities;
+using Domain.Models.Pagination;
 
 namespace Domain.RepositoryInterfaces
 {
     public interface ICartRepository
     {
-        public Task<ICollection<CartItemEntity>> GetCartItemsByUserId(Guid userId);
-        public Task<CartEntity> GetCartById(Guid id);
-        public Task<CartEntity> GetCartByUserId(Guid userId);
-        public Task<UserEntity> GetUserByCartId(Guid cartId);
+        public Task<CartEntity> AddCartAsync(CartEntity cart, CancellationToken cancellationToken);
 
-        public Task<CartEntity> CleanCartById(Guid cartId);
+        public Task<CartItemEntity[]> GetCartItemsByUserIdAsync(Guid userId, PageParams pageParams ,CancellationToken cancellationToken);
+        public Task<CartEntity> GetCartByIdAsync(Guid id, CancellationToken cancellationToken);
+        public Task<CartEntity> GetCartByUserIdAsync(Guid userId, CancellationToken cancellationToken);
+        
+        public Task<CartEntity> CleanCartByIdAsync(Guid cartId, CancellationToken cancellationToken);
+
+        public Task<CartEntity> DeleteCartByIdAsync(Guid cartId, CancellationToken cancellationToken);
+
     }
 }

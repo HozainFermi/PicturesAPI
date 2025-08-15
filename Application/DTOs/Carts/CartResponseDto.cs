@@ -1,4 +1,4 @@
-﻿using Application.DTOs.Pagination;
+﻿using Domain.Models.Pagination;
 
 namespace Application.DTOs.Carts
 {

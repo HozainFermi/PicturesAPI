@@ -7,9 +7,9 @@ namespace Application.ServiceInterfaces
 {
     public interface IAuthService
     {
-        Task<UserEntity?> Register(UserDto request);
-        Task<TokenResponseDto?> Login(UserLoginDto request);
-        Task<TokenResponseDto?> RefreshTokens(RefreshTokenRequestDto request);
+        Task<UserEntity?> Register(UserDto request,CancellationToken cancellationToken);
+        Task<TokenResponseDto?> Login(UserLoginDto request, CancellationToken cancellationToken);
+        Task<TokenResponseDto?> RefreshTokens(RefreshTokenRequestDto request, CancellationToken cancellationToken);
 
     }
 }
