@@ -12,11 +12,11 @@ namespace Persistance.Extensions
             
             query.Where(e => e.UserName.Contains(username));
 
-            var total = await query.CountAsync();
-            if (total == 0)
-            {
-                return null;
-            }
+            //var total = await query.CountAsync();
+            //if (total == 0)
+            //{
+            //    return null;
+            //}
 
             var page = pageParams.Page ?? 1;
             var pagesize = pageParams.PageSize ?? 10;

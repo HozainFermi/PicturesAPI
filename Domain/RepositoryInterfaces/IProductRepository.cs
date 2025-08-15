@@ -12,6 +12,8 @@ namespace Domain.RepositoryInterfaces
 
         public Task<ProductEntity> UpdateProductAsync(ProductEntity product, CancellationToken cancellationToken);
 
+        public Task<ProductEntity> DisableProductAsync(Guid id, CancellationToken cancellationToken);
+
         public Task<ProductEntity> DeleteProductAsync(Guid id, CancellationToken cancellationToken);
 
     }

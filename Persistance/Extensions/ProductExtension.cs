@@ -28,6 +28,7 @@ namespace Persistance.Extensions
 
             return query;
         }
+       
 
         public static IQueryable<ProductEntity> Sort(this IQueryable<ProductEntity> query, ProductSortParams sortParams)
         {
@@ -35,7 +36,7 @@ namespace Persistance.Extensions
                 ? query.OrderByDescending(GetKeySelector(sortParams.OrderBy))
                 : query.OrderBy(GetKeySelector(sortParams.OrderBy));
         }
-
+        
         private static Expression<Func<ProductEntity, object>> GetKeySelector(string orderBy)
         {
             if (string.IsNullOrEmpty(orderBy))
@@ -50,6 +51,7 @@ namespace Persistance.Extensions
                 _ => x => x.ProductName
             };
         }
+        
 
         public static async Task<ProductEntity[]> Page(this IQueryable<ProductEntity> query, PageParams pageParams)
         {
@@ -86,10 +88,10 @@ namespace Persistance.Extensions
             return res;
         }
 
-        public static async Task<CartItemEntity[]> Page(this IQueryable<CartItemEntity> query, PageParams pageParams)
+        public static async Task<CartItemEntity[]> Page(this IQueryable<CartItemEntity> query, Guid cartId ,PageParams pageParams)
         {
 
-            query.Include(p => p.Product);
+            query.Include(i => i.Product).Where(i=>i.CartId==cartId).OrderBy(i => i.Id);//сделать ордер из вне
 
             //var total = await query.CountAsync();
             //if (total == 0)

@@ -13,15 +13,24 @@ namespace Persistance.RepoImplementation
     public class OrderRepository : IOrderRepository
     {
         PicturesDbContext _dbContext;
-        ILogger _logger;
+        ILogger<OrderRepository> _logger;
 
-        public OrderRepository(PicturesDbContext dbContext, ILogger logger)
+        public OrderRepository(PicturesDbContext dbContext, ILogger<OrderRepository> logger)
         {
             _dbContext = dbContext;
             _logger = logger;
         }
 
-        public async Task<OrderEntity> Delete(Guid orderId, CancellationToken cancellationToken)
+        public async Task<OrderEntity> AddOrderAsync(OrderEntity order, CancellationToken cancellationToken)
+        {
+            
+            var added = await _dbContext.Orders.AddAsync(order,cancellationToken);
+            return added.Entity;
+
+        }
+
+
+        public async Task<OrderEntity> DeleteAsync(Guid orderId, CancellationToken cancellationToken)
         {
             OrderEntity? existingOrder = await _dbContext.Orders.FindAsync(orderId, cancellationToken);
             if (existingOrder == null) { throw new EntityNotFoundException(orderId, typeof(OrderEntity)); }
@@ -46,7 +55,7 @@ namespace Persistance.RepoImplementation
             
         }
 
-        public async Task<OrderEntity> UpdateOrder(OrderEntity updateOrder, CancellationToken cancellationToken)
+        public async Task<OrderEntity> UpdateOrderAsync(OrderEntity updateOrder, CancellationToken cancellationToken)
         {
             OrderEntity? existingOrder = await _dbContext.Orders.FindAsync(updateOrder.Id, cancellationToken);
             if (existingOrder == null) { throw new EntityNotFoundException(updateOrder.Id, typeof(OrderEntity)); }
@@ -69,7 +78,7 @@ namespace Persistance.RepoImplementation
             }
         }
 
-        public Task<OrderEntity> UpdateOrderDeliveryById(Guid id, string newDeliveryAddress, CancellationToken cancellationToken)
+        public Task<OrderEntity> UpdateOrderDeliveryByIdAsync(Guid id, string newDeliveryAddress, CancellationToken cancellationToken)
         {
             //OrderEntity? existingOrder = await _dbContext.Orders.FindAsync(updateOrder.Id, cancellationToken);
             //if (existingOrder == null) { throw new EntityNotFoundException(updateOrder.Id, typeof(OrderEntity)); }
@@ -80,7 +89,7 @@ namespace Persistance.RepoImplementation
 
        
 
-        public async Task<OrderEntity> GetById(Guid id, CancellationToken cancellationToken)
+        public async Task<OrderEntity> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             OrderEntity? found = await _dbContext.Orders.FindAsync(id);
             if (found == null) { throw new EntityNotFoundException(id, typeof(OrderEntity)); }
@@ -90,7 +99,7 @@ namespace Persistance.RepoImplementation
             
         }
 
-        public async Task<OrderEntity[]> GetByUserId(Guid userId, PageParams pageParams, CancellationToken cancellationToken)
+        public async Task<OrderEntity[]> GetByUserIdAsync(Guid userId, PageParams pageParams, CancellationToken cancellationToken)
         {
             try
             {

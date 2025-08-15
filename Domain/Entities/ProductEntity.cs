@@ -22,10 +22,8 @@ namespace Domain.Entities
         public List<string>? Tags { get; set; }
         public Guid ProductOwnerId { get; set; }
 
-
         [Column(TypeName = "jsonb")]
         public List<string>? MediaPathsJson { get; set; } = new List<string>();
-
 
         public UserEntity ProductOwner { get; set; }
 

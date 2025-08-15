@@ -16,9 +16,9 @@ namespace Persistance.RepoImplementation
     public class ProductRepository : IProductRepository
     {
         PicturesDbContext _dbContext;
-        private readonly ILogger _logger;
+        private readonly ILogger<ProductRepository> _logger;
 
-        public ProductRepository(PicturesDbContext picturesDbContext ,ILogger logger)
+        public ProductRepository(PicturesDbContext picturesDbContext ,ILogger<ProductRepository> logger)
         {
             _dbContext= picturesDbContext;
             _logger = logger;
@@ -32,6 +32,21 @@ namespace Persistance.RepoImplementation
                 return result.Entity;
             }
             catch (Exception ex) { throw new RepositoryException("Faild to add product", ex); }
+        }
+
+        public async Task<ProductEntity> DisableProductAsync(Guid id, CancellationToken cancellationToken)
+        {
+            ProductEntity? foundProduct = await _dbContext.Products.FindAsync(id);
+            if (foundProduct != null) { throw new EntityNotFoundException(id, typeof(ProductEntity)); }
+
+            try
+            {
+                foundProduct.IsActive = false;
+                await _dbContext.SaveChangesAsync();
+                return foundProduct;
+            }
+            catch (DbException ex) { throw new RepositoryException("Faild to disable product", ex); }
+
         }
 
         public async Task<ProductEntity> DeleteProductAsync(Guid id, CancellationToken cancellationToken)
