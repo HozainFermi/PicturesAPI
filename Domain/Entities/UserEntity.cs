@@ -26,10 +26,7 @@ namespace Domain.Entities
 
         [Required]
         public string PasswordHash { get; set; }
-
-        [Required]
-        public string Role { get; set; }
-
+       
         [Column(TypeName = "jsonb")]
         public string[] MediaPathsJson { get; set; } = Array.Empty<string>();
 
@@ -39,7 +36,7 @@ namespace Domain.Entities
         public DateTime? RefreshTokenExpiryTime { get; set; }
 
         public ICollection<OrderEntity>? Orders { get; set; }
-        public RoleEntity UserRole { get; set; }
+        public RoleEntity Role { get; set; }
 
         public CartEntity InitializeCart()
         {

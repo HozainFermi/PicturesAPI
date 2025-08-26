@@ -14,9 +14,14 @@ namespace Persistance
             services.AddScoped<ICartRepository, CartRepository>();
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IOrderRepository, OrderRepository>();
-            //...
+            services.AddScoped<ICartItemRepository, CartItemRepository>();
+            //services.AddScoped<IBidRepository, BidRepository>();
+            //services.AddScoped<IAuctionRepository, AuctionRepository>();
+            services.AddScoped<IProductRepository, ProductRepository>();
+            
+           
 
-            services.AddDbContext<PicturesDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<PicturesDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("Pictures")));
 
             return services;
         }
