@@ -17,11 +17,14 @@ namespace Persistance.Data
 
 
         public DbSet<AuctionEntity> Auctions { get; set; } = null!;
+        public DbSet<BidEntity> Bids { get; set; } = null!;
         public DbSet<CartEntity> Carts { get; set; } = null!;
         public DbSet<CartItemEntity> CartItems { get; set; } = null!;
         public DbSet<OrderEntity> Orders { get; set; } = null!;
         public DbSet<ProductEntity> Products { get; set; } = null!;
         public DbSet<UserEntity> Users { get; set; } = null!;
+        public DbSet<RoleEntity> Roles { get; set; } = null!;
+        public DbSet<PermissionEntity> Permissions { get; set; } = null!;
         
         //TODO
         //public DbSet<RaffleEntity> Raffles { get; set; } = null!; 

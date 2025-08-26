@@ -1,4 +1,5 @@
 using Application;
+using Infrastracture.Authorization;
 using Persistance;
 
 namespace Pictures
@@ -21,6 +22,9 @@ namespace Pictures
                     policyBuilder.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:4200");
                 });
             });
+
+            builder.Services.Configure<AuthorizationOptions>(builder.Configuration.GetSection("AuthorizationOptions"));
+
 
             builder.Services
                 .AddPersistance(builder.Configuration)
